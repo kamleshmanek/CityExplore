@@ -39,7 +39,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: scale(20),
-    paddingTop: verticalScale(10),
+    paddingTop:0,
+    paddingBottom:verticalScale(70)
+    // paddingTop: verticalScale(10),
+    
   },
   emptyContainer: {
     flex: 1,

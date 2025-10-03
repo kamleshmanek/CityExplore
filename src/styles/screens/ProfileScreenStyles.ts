@@ -10,11 +10,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: verticalScale(20),
+    paddingBottom: verticalScale(70),
   },
   header: {
     alignItems: 'center',
-    paddingVertical: verticalScale(40),
+    paddingVertical: verticalScale(20),
     backgroundColor: colors.background.card,
     marginBottom: verticalScale(20),
   },

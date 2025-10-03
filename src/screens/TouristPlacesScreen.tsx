@@ -13,6 +13,7 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import colors from '../themes/colors';
 import styles from '../styles/screens/TouristPlacesScreenStyles';
 import { useRoute } from '@react-navigation/native';
+import Header from '../components/Header';
 
 interface TouristPlacesScreenProps {
   city?: string;
@@ -57,7 +58,7 @@ export const TouristPlacesScreen: React.FC<TouristPlacesScreenProps> = ({
   };
 
   const renderPlace = ({ item }: { item: GeoapifyPlace }) => (
-    <PlaceCard place={item} />
+    <PlaceCard place={item}  containerStyle={{shadowColor:colors.category.touristPlaces}} />
   );
 
   const renderEmpty = () => (
@@ -88,10 +89,10 @@ export const TouristPlacesScreen: React.FC<TouristPlacesScreenProps> = ({
       backgroundColor={colors.background.primary}
       barStyle="dark-content"
     >
-      <View style={styles.header}>
-        <Text style={styles.title}>🏛️ Tourist Places</Text>
-        <Text style={styles.subtitle}>Explore amazing attractions</Text>
-      </View>
+      <Header 
+      containerStyle={{backgroundColor:colors.category.touristPlaces }}
+        title="Tourist Places"
+      />
 
       <FlatList
         data={places}

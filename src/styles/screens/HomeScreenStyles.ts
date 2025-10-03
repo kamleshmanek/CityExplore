@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: verticalScale(30),
+    marginBottom: verticalScale(15),
     paddingHorizontal: scale(20),
   },
   title: {
@@ -31,12 +31,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background.secondary,
     paddingHorizontal: scale(12),
-    paddingVertical: verticalScale(6),
-    borderRadius: moderateScale(20),
+    paddingVertical: verticalScale(12),
+    borderRadius: moderateScale(10),
+    width:"100%",
+    marginBottom: verticalScale(10),
+
   },
   cityText: {
     fontSize: moderateScale(14),
-    color: colors.text.primary,
+    color: colors.text.black,
     fontFamily: fonts.regular,
     marginRight: scale(5),
   },
@@ -46,7 +49,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: moderateScale(16),
     color: colors.text.secondary,
-    textAlign: 'center',
     fontFamily: fonts.regular,
   },
   categoriesContainer: {
@@ -58,7 +60,8 @@ const styles = StyleSheet.create({
     paddingBottom: verticalScale(20),
   },
   categoryCard: {
-    width: '48%', // Slightly less than 50% to account for margins
+    width: '48%',
+    aspectRatio: 1, // Make cards square
     marginBottom: verticalScale(20),
     borderRadius: moderateScale(20),
     backgroundColor: colors.background.primary,
@@ -70,23 +73,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: moderateScale(10),
     elevation: 10,
+    overflow: 'hidden',
   },
   cardContent: {
+    flex: 1,
     borderRadius: moderateScale(20),
-    padding: scale(25),
+    padding: scale(15),
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: verticalScale(140),
+    width: '100%',
+    height: '100%',
   },
   categoryIcon: {
-    fontSize: moderateScale(40),
-    marginBottom: verticalScale(12),
+    fontSize: moderateScale(36),
+    marginBottom: verticalScale(8),
   },
   categoryName: {
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(14),
     color: colors.background.primary,
     textAlign: 'center',
     fontFamily: fonts.bold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    lineHeight: moderateScale(20),
   },
   // City Selection Modal Styles
   modalContainer: {

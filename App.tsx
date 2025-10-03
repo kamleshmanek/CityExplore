@@ -10,18 +10,42 @@ import {
   Text,
   ActivityIndicator,
   StyleSheet,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 import { AppNavigator } from './src/navigation/AppNavigator';
-
-// Import fonts to ensure they're bundled
 import './src/themes/fonts';
 
 function App() {
   const [fontsReady, setFontsReady] = React.useState(false);
 
+  const requestLocationPermission = async (): Promise<boolean> => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'This app needs access to your location to show nearby places.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn('Error requesting location permission:', err);
+        return false;
+      }
+    }
+    return true;
+  };
+
   useEffect(() => {
-    // Simple timeout to ensure fonts are loaded
+    requestLocationPermission()
     const timer = setTimeout(() => {
       setFontsReady(true);
     }, 100);
@@ -29,22 +53,18 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!fontsReady) {
-    return (
-      <SafeAreaProvider>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#4ECDC4" />
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      </SafeAreaProvider>
-    );
-  }
-
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      <AppNavigator />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        {fontsReady ? <AppNavigator /> : (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        )}
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

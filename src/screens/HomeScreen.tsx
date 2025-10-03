@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import {
   View,
@@ -8,6 +8,8 @@ import {
   FlatList,
   Modal,
   Alert,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -16,6 +18,8 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import colors from '../themes/colors';
 import styles from '../styles/screens/HomeScreenStyles';
 import { apiService } from '../services/apiService';
+import { getCurrentCity } from '../services/getCurrentCity';
+import { verticalScale } from '../themes/styleConfig';
 
 const MIN_SEARCH_LENGTH = 2;
 const MAX_SUGGESTIONS = 5;
@@ -101,6 +105,27 @@ const categories: Category[] = [
     category: 'healthcare',
     color: colors.category.healthcare,
   },
+  {
+    id: 'buildings',
+    name: 'Buildings',
+    icon: '🏢',
+    category: 'building',
+    color: colors.category.buildings,
+  },
+  {
+    id: 'populated_places',
+    name: 'Populated Places',
+    icon: '🏘️',
+    category: 'populated_place',
+    color: colors.category.populatedPlaces,
+  },
+  {
+    id: 'sport',
+    name: 'Sports',
+    icon: '⚽',
+    category: 'sport',
+    color: colors.category.sports,
+  },
 ];
 
 export const HomeScreen: React.FC<HomeScreenProps> = () => {
@@ -135,7 +160,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = () => {
         );
         setCitySuggestions([]);
       } finally {
-        setLoading(false);
+          setLoading(false);
       }
     },
     [],
@@ -158,29 +183,37 @@ export const HomeScreen: React.FC<HomeScreenProps> = () => {
     [fetchCitySuggestions],
   );
 
-  const selectCity = useCallback((suggestion: CitySuggestion) => {
-    console.log('Selected city:', suggestion.displayName);
+  const getcity = async () => {
+    setLoading(true);
+    try {
+      const city = await getCurrentCity();
+      setCurrentCity(city);
+      setShowCityModal(false);
+      setSearchText('');
+      setCitySuggestions([]);
+    } catch (error) {
+      console.error('Error getting current city:', error);
+      // Fallback to default city if there's an error
+      setCurrentCity(DEFAULT_CITY);
+    } finally {
+        setLoading(false)
+    }
+  };
+  useEffect(() => {
+    getcity();
+  }, []);
 
+  const selectCity = useCallback((suggestion: CitySuggestion) => {
     setCurrentCity(suggestion.displayName);
     setShowCityModal(false);
     setSearchText('');
     setCitySuggestions([]);
 
-    // Clear debounce timer
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
       debounceTimerRef.current = null;
     }
   }, []);
-
-  // Screen name mapping for better maintainability
-  const screenMapping: Record<string, keyof ExploreStackParamList> = {
-    restaurants: 'Restaurants',
-    hotels: 'Hotels',
-    healthcare: 'Healthcare',
-    entertainment: 'Entertainment',
-    tourist_places: 'TouristPlaces',
-  };
 
   const handleCategoryPress = useCallback(
     (category: Category) => {
@@ -190,13 +223,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = () => {
         'for city:',
         currentCity,
       );
-      const screenName = screenMapping[category.id];
 
-      if (screenName) {
-        (navigation as any).navigate(screenName, { city: currentCity });
-      } else {
-        console.warn('No screen mapping found for category:', category.id);
-      }
+      // Use type assertion to avoid TypeScript errors
+      (navigation as any).navigate('CommonScreen', {
+        city: currentCity,
+        category: category.id,
+        title: category.name,
+        color: category.color,
+        data: category,
+      });
     },
     [currentCity, navigation],
   );
@@ -216,35 +251,51 @@ export const HomeScreen: React.FC<HomeScreenProps> = () => {
     <SafeAreaWrapper
       backgroundColor={colors.background.primary}
       barStyle="dark-content"
-    >
-      <View style={styles.header}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>City Explorer</Text>
-          <TouchableOpacity
-            style={styles.citySelector}
-            onPress={() => setShowCityModal(true)}
-            accessibilityLabel={`Current city: ${currentCity}. Tap to change`}
-            accessibilityRole="button"
-          >
+    > 
+    
+    <View style={[styles.header,{marginBottom:0}]}>
+    <View style={styles.titleContainer}>
+      <Text style={styles.title}>City Explorer</Text>
+      
+    </View>
+    
+  </View>
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: verticalScale(70) }}
+      >
+        <View style={styles.header}>
+        <TouchableOpacity
+        style={styles.citySelector}
+        onPress={() => setShowCityModal(true)}
+        accessibilityLabel={`Current city: ${currentCity}. Tap to change`}
+        accessibilityRole="button"
+      >
+        {loading ? (
+          <ActivityIndicator size="small" color={colors.text.black} />
+        ) : (
+          <>
             <Text style={styles.cityText}>{currentCity}</Text>
             <Text style={styles.cityIcon}>📍</Text>
-          </TouchableOpacity>
+          </>
+        )}
+      </TouchableOpacity>
+          <Text style={styles.subtitle}>
+            Discover amazing places in your city
+          </Text>
         </View>
-        <Text style={styles.subtitle}>
-          Discover amazing places in your city
-        </Text>
-      </View>
 
-      <View style={styles.categoriesContainer}>
-        {categories.map(category => (
-          <CategoryCard
-            key={category.id}
-            category={category}
-            onPress={handleCategoryPress}
-          />
-        ))}
-      </View>
-
+        <View style={styles.categoriesContainer}>
+          {categories.map(category => (
+            <CategoryCard
+              key={category.id}
+              category={category}
+              onPress={handleCategoryPress}
+            />
+          ))}
+        </View>
+      </ScrollView>
       {/* City Selection Modal */}
       <Modal
         visible={showCityModal}

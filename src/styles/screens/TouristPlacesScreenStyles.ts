@@ -40,6 +40,8 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: scale(20),
     paddingTop: verticalScale(10),
+    paddingBottom:verticalScale(70)
+
   },
   emptyContainer: {
     flex: 1,

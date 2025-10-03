@@ -10,6 +10,7 @@ import { GeoapifyPlace } from '../types';
 import { apiService } from '../services/apiService';
 import { PlaceCard } from '../components/PlaceCard';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
+import Header from '../components/Header';
 import styles from '../styles/screens/RestaurantsScreenStyles';
 import { useRoute } from '@react-navigation/native';
 
@@ -56,7 +57,7 @@ export const RestaurantsScreen: React.FC<RestaurantsScreenProps> = ({
   };
 
   const renderRestaurant = ({ item }: { item: GeoapifyPlace }) => (
-    <PlaceCard place={item} />
+    <PlaceCard place={item} containerStyle={{shadowColor: "#FF6B6B"}} />
   );
 
   const renderEmpty = () => (
@@ -78,10 +79,10 @@ export const RestaurantsScreen: React.FC<RestaurantsScreenProps> = ({
 
   return (
     <SafeAreaWrapper backgroundColor="#FFFFFF" barStyle="dark-content">
-      <View style={styles.header}>
-        <Text style={styles.title}>🍽️ Restaurants</Text>
-        <Text style={styles.subtitle}>Discover great places to eat</Text>
-      </View>
+        <Header 
+        containerStyle={{backgroundColor:"#FF6B6B" }}
+          title=" Restaurants"
+        />
 
       <FlatList
         data={restaurants}

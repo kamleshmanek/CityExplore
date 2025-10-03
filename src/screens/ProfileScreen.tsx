@@ -3,12 +3,15 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import colors from '../themes/colors';
 import styles from '../styles/screens/ProfileScreenStyles';
+import { verticalScale } from '../themes/styleConfig';
+import { useNavigation } from '@react-navigation/native';
 
 interface ProfileScreenProps {}
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = () => {
+  const navigation = useNavigation<any>()
   const profileOptions = [
-    { title: 'Settings', icon: '⚙️', action: () => {} },
+    { title: 'Settings', icon: '⚙️', action: () => navigation.navigate('Settings') },
     { title: 'Help & Support', icon: '❓', action: () => {} },
     { title: 'About', icon: 'ℹ️', action: () => {} },
     { title: 'Rate App', icon: '⭐', action: () => {} },
@@ -34,7 +37,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = () => {
       backgroundColor={colors.background.secondary}
       barStyle="dark-content"
     >
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView style={{flex:1,paddingBottom:verticalScale(70)}} contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <View style={styles.profileImage}>
             <Text style={styles.profileEmoji}>👤</Text>

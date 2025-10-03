@@ -13,6 +13,7 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import colors from '../themes/colors';
 import styles from '../styles/screens/HotelsScreenStyles';
 import { useRoute } from '@react-navigation/native';
+import Header from '../components/Header';
 
 interface HotelsScreenProps {
   city?: string;
@@ -57,7 +58,7 @@ export const HotelsScreen: React.FC<HotelsScreenProps> = ({
   };
 
   const renderHotel = ({ item }: { item: GeoapifyPlace }) => (
-    <PlaceCard place={item} />
+    <PlaceCard place={item} containerStyle={{shadowColor:colors.category.hotels}} />
   );
 
   const renderEmpty = () => (
@@ -85,10 +86,14 @@ export const HotelsScreen: React.FC<HotelsScreenProps> = ({
       backgroundColor={colors.background.primary}
       barStyle="dark-content"
     >
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>🏨 Hotels</Text>
         <Text style={styles.subtitle}>Find perfect places to stay</Text>
-      </View>
+      </View> */}
+      <Header 
+      containerStyle={{backgroundColor:colors.category.hotels }}
+        title="Hotels"
+      />
 
       <FlatList
         data={hotels}

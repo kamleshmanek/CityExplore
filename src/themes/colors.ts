@@ -16,6 +16,9 @@ export const category = {
   entertainment: '#FFD93D',  // Yellow
   touristPlaces: '#45B7D1',  // Blue
   healthcare: '#FF7675',     // Light red
+  buildings: '#9B59B6',      // Purple for buildings
+  populatedPlaces: '#2ECC71', // Green for populated places
+  sports: '#3498db',         // Blue for sports
 } as const;
 
 // Text colors
@@ -23,13 +26,13 @@ export const text = {
   primary: '#2E3440',        // Dark text
   secondary: '#666666',      // Gray text
   muted: '#999999',          // Light gray text
-  light: '#CCCCCC',          // Very light gray
+  light: '#CCCCCC',
+  black: '#000000',          // Very light gray
 } as const;
 
-// Background colors
 export const background = {
   primary: '#FFFFFF',        // White background
-  secondary: '#F8F9FA',      // Light gray background
+  secondary: '#e8ebed',      // Light gray background
   card: '#FFFFFF',           // Card background
 } as const;
 

@@ -16,6 +16,7 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import { useRoute } from '@react-navigation/native';
 import colors from '../themes/colors';
 import styles from '../styles/screens/HealthcareScreenStyles';
+import Header from '../components/Header';
 
 interface HealthcareScreenProps {
   city?: string;
@@ -60,7 +61,7 @@ export const HealthcareScreen: React.FC<HealthcareScreenProps> = ({
   };
 
   const renderHealthcare = ({ item }: { item: GeoapifyPlace }) => (
-    <PlaceCard place={item} />
+    <PlaceCard place={item} containerStyle={{shadowColor:colors.category.healthcare}}/>
   );
 
   const renderEmpty = () => (
@@ -90,12 +91,16 @@ export const HealthcareScreen: React.FC<HealthcareScreenProps> = ({
       backgroundColor={colors.background.primary}
       barStyle="dark-content"
     >
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.title}>🏥 Healthcare</Text>
         <Text style={styles.subtitle}>
           Find medical facilities and services
         </Text>
-      </View>
+      </View> */}
+      <Header 
+      containerStyle={{backgroundColor:colors.category.healthcare }}
+        title="Healthcare"
+      />
 
       <FlatList
         data={healthcare}

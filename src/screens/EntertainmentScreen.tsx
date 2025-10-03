@@ -13,6 +13,7 @@ import { SafeAreaWrapper } from '../components/SafeAreaWrapper';
 import styles from '../styles/screens/EntertainmentScreenStyles';
 import colors from '../themes/colors';
 import { useRoute } from '@react-navigation/native';
+import Header from '../components/Header';
 
 interface EntertainmentScreenProps {
   city?: string;
@@ -57,7 +58,7 @@ export const EntertainmentScreen: React.FC<EntertainmentScreenProps> = ({
   };
 
   const renderEntertainment = ({ item }: { item: GeoapifyPlace }) => (
-    <PlaceCard place={item} />
+    <PlaceCard place={item} containerStyle={{shadowColor:colors.category.entertainment}}  />
   );
 
   const renderEmpty = () => (
@@ -90,10 +91,10 @@ export const EntertainmentScreen: React.FC<EntertainmentScreenProps> = ({
       backgroundColor={colors.background.primary}
       barStyle="dark-content"
     >
-      <View style={styles.header}>
-        <Text style={styles.title}>🎭 Entertainment</Text>
-        <Text style={styles.subtitle}>Find fun places to enjoy</Text>
-      </View>
+      <Header 
+        containerStyle={{backgroundColor:colors.category.entertainment }}
+          title="Entertainment"
+        />
 
       <FlatList
         data={entertainment}
